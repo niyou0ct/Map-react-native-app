@@ -1,13 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react'
 import {
   SafeAreaView,
@@ -15,7 +5,8 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar
+  StatusBar,
+  Button
 } from 'react-native'
 
 import {
@@ -25,11 +16,20 @@ import {
   DebugInstructions,
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen'
+import { NavigationObj } from '../../../types';
 
-const App = () => {
+interface Props {
+  navigation: NavigationObj
+}
+
+const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
-  const usingHermes =
-    typeof HermesInternal === 'object' && HermesInternal !== null
+  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+  const goToMap = (): void => {
+    const { navigate } = props.navigation
+    navigate('Map')
+  }
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -44,6 +44,13 @@ const App = () => {
             </View>
           )}
           <View style={styles.body}>
+            <View>
+              <Button title="Go to Map" onPress={goToMap}>
+                <Text>
+                  HeyMap!
+              </Text>
+              </Button>
+            </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
@@ -116,4 +123,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default App
+export default Home

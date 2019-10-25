@@ -8,6 +8,14 @@ module.exports = {
     'prettier/react'
   ],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        'singleQuote': true,
+        'semi': false,
+        'printWidth': 100,
+      }
+    ],
     '@typescript-eslint/no-use-before-define': 'off'
   }
 }
