@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  Button
-} from 'react-native'
+import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} from 'react-native'
 
 import {
   Header,
@@ -16,7 +8,7 @@ import {
   DebugInstructions,
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen'
-import { NavigationObj } from '../../../types';
+import {NavigationObj} from '../../../types'
 
 interface Props {
   navigation: NavigationObj
@@ -26,7 +18,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
   const goToMap = (): void => {
-    const { navigate } = props.navigation
+    const {navigate} = props.navigation
     navigate('Map')
   }
 
@@ -34,9 +26,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
           <Header />
           {!usingHermes ? null : (
             <View style={styles.engine}>
@@ -46,16 +36,14 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
           <View style={styles.body}>
             <View>
               <Button title="Go to Map" onPress={goToMap}>
-                <Text>
-                  HeyMap!
-              </Text>
+                <Text>HeyMap!</Text>
               </Button>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
+                Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then
+                come back to see your edits.
               </Text>
             </View>
             <View style={styles.sectionContainer}>

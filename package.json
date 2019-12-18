@@ -11,7 +11,7 @@
     "build:watch": "tsc --watch",
     "test": "jest",
     "prettier:write": "yarn prettier --write **/*.{js,jsx,ts,tsx,json} && yarn prettier --write *.{js,jsx,ts,tsx,json}",
-    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./"
+    "lint": "tsc --noEmit && eslint --ext .jsx,.ts,.tsx ./"
   },
   "dependencies": {
     "react": "16.9.0",
