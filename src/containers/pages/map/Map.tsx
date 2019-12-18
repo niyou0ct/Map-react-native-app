@@ -1,15 +1,11 @@
 import React, {useState} from 'react'
 import {View, StyleSheet} from 'react-native'
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'
+import MapView, {PROVIDER_GOOGLE, Marker, LatLng} from 'react-native-maps'
 import {RegionObj} from './types'
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    ...StyleSheet.absoluteFillObject
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -24,7 +20,20 @@ const Map: React.FC = (): JSX.Element => {
     longitudeDelta: 0.0421
   }
 
-  console.log(MapView)
+  const markers: LatLng[] = [
+    {
+      latitude: 37.78825,
+      longitude: -122.4324
+    },
+    {
+      latitude: 37.78823,
+      longitude: -122.4323
+    }
+  ]
+
+  const markerList: JSX.Element[] = markers.map((marker: LatLng) => (
+    <Marker coordinate={marker} key={marker.latitude} />
+  ))
 
   const [regionState] = useState<RegionObj>(initialState)
 
@@ -33,8 +42,9 @@ const Map: React.FC = (): JSX.Element => {
       <MapView
         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
         style={styles.map}
-        region={regionState}
-      />
+        region={regionState}>
+        {markerList}
+      </MapView>
     </View>
   )
 }
