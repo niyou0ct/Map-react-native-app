@@ -1,22 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react'
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar
-} from 'react-native'
+import React, {useEffect} from 'react'
+import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} from 'react-native'
 
 import {
   Header,
@@ -26,17 +9,39 @@ import {
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen'
 
-const App = () => {
+import firebase from 'firebase'
+import {NavigationObj} from '../../../types'
+
+interface Props {
+  navigation: NavigationObj
+}
+
+const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
-  const usingHermes =
-    typeof HermesInternal === 'object' && HermesInternal !== null
+  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+  const goToMap = (): void => {
+    const {navigate} = props.navigation
+    navigate('Map')
+  }
+
+  useEffect(() => {
+    firebase.initializeApp({
+      apiKey: 'AIzaSyAC6aDK6EW0LGbLgaICQXpwIqCzJeWez-k',
+      authDomain: 'firstmap-1571998274715.firebaseapp.com',
+      databaseURL: 'https://firstmap-1571998274715.firebaseio.com',
+      projectId: 'firstmap-1571998274715',
+      storageBucket: 'firstmap-1571998274715.appspot.com',
+      messagingSenderId: '118443670237',
+      appId: '1:118443670237:web:0065004b3d2dae1c9df934',
+      measurementId: 'G-18X6NXQH9C'
+    })
+  }, [])
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
           <Header />
           {!usingHermes ? null : (
             <View style={styles.engine}>
@@ -44,11 +49,16 @@ const App = () => {
             </View>
           )}
           <View style={styles.body}>
+            <View>
+              <Button title="Go to Map" onPress={goToMap}>
+                <Text>HeyMap!</Text>
+              </Button>
+            </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
+                Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then
+                come back to see your edits.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
@@ -116,4 +126,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default App
+export default Home
