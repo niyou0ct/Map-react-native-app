@@ -16,6 +16,9 @@ module.exports = {
         'printWidth': 100,
       }
     ],
-    '@typescript-eslint/no-use-before-define': 'off'
+    '@typescript-eslint/no-use-before-define': 'off',
+    'import/no-cycle': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react-hooks/rules-of-hooks': 'off',
   }
 }

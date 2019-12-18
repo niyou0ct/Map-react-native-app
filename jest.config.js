@@ -3,8 +3,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)x?$',
   transform: {
-    '^.+\\.(js|tsx?)$':
-      '<rootDir>/node_modules/react-native/jest/preprocessor.js'
+    '^.+\\.(js|tsx?)$': '<rootDir>/node_modules/react-native/jest/preprocessor.js'
   },
   testPathIgnorePatterns: ['\\.snap$', '<rootDir>/node_modules/'],
   cacheDirectory: '.jest/cache',

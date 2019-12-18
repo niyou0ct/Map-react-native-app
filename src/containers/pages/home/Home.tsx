@@ -9,7 +9,7 @@ import {
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen'
 
-import firebase from 'firebase'
+import axios, {AxiosResponse} from 'axios'
 import {NavigationObj} from '../../../types'
 
 interface Props {
@@ -19,22 +19,35 @@ interface Props {
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-  const goToMap = (): void => {
+  // const goToMap = (): void => {
+  //   const {navigate} = props.navigation
+  //   navigate('Map')
+  // }
+
+  // const goToAddStore = (): void => {
+  //   const {navigate} = props.navigation
+  //   navigate('AddStore')
+  // }
+
+  const moveToPage = (value: string) => {
     const {navigate} = props.navigation
-    navigate('Map')
+    navigate(value)
   }
 
   useEffect(() => {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyAC6aDK6EW0LGbLgaICQXpwIqCzJeWez-k',
-      authDomain: 'firstmap-1571998274715.firebaseapp.com',
-      databaseURL: 'https://firstmap-1571998274715.firebaseio.com',
-      projectId: 'firstmap-1571998274715',
-      storageBucket: 'firstmap-1571998274715.appspot.com',
-      messagingSenderId: '118443670237',
-      appId: '1:118443670237:web:0065004b3d2dae1c9df934',
-      measurementId: 'G-18X6NXQH9C'
-    })
+    const postApi = async (): Promise<void> => {
+      const response: AxiosResponse<any> = await axios.get(
+        'https://firstmap-1571998274715.firebaseio.com/stores'
+      )
+
+      // console.log(response)
+      //
+      if (response.status === 200) {
+        // console.log(response.data)
+      }
+    }
+
+    postApi()
   }, [])
 
   return (
@@ -50,9 +63,8 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
           )}
           <View style={styles.body}>
             <View>
-              <Button title="Go to Map" onPress={goToMap}>
-                <Text>HeyMap!</Text>
-              </Button>
+              <Button title="Go to Map" onPress={() => moveToPage('Map')} />
+              <Button title="Go to Registration Store" onPress={() => moveToPage('AddStore')} />
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
