@@ -1,9 +1,8 @@
-import {combineReducers} from 'redux'
+import {combineReducers, Reducer, AnyAction} from 'redux'
 
 import mapSearchState from './map/search/reducer'
+import {RootState} from './types'
 
-const reducer = combineReducers({
-  ...mapSearchState
-})
+const reducer: Reducer<RootState, AnyAction> = combineReducers({mapSearchState})
 
 export default reducer

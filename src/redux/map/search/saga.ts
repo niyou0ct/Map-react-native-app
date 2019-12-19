@@ -5,10 +5,10 @@ import postMapSearchApi from './api'
 import {successMapSearchApi, REQUEST_MAP_SEARCH_API, failMapSearchApi} from './action'
 
 function* activateRequestMapSearch(action: MapSearchState) {
-  const data: any = yield call(postMapSearchApi, action.keyword)
+  const response: any = yield call(postMapSearchApi, action.keyword)
 
-  if (data) {
-    yield put(successMapSearchApi(data))
+  if (response) {
+    yield put(successMapSearchApi(response.data))
   } else {
     yield put(failMapSearchApi())
   }

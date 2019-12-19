@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} from 'react-native'
 
 import {
@@ -9,7 +9,6 @@ import {
   ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen'
 
-import axios, {AxiosResponse} from 'axios'
 import {NavigationObj} from '../../../types'
 
 interface Props {
@@ -19,36 +18,11 @@ interface Props {
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-  // const goToMap = (): void => {
-  //   const {navigate} = props.navigation
-  //   navigate('Map')
-  // }
-
-  // const goToAddStore = (): void => {
-  //   const {navigate} = props.navigation
-  //   navigate('AddStore')
-  // }
 
   const moveToPage = (value: string) => {
     const {navigate} = props.navigation
     navigate(value)
   }
-
-  useEffect(() => {
-    const postApi = async (): Promise<void> => {
-      const response: AxiosResponse<any> = await axios.get(
-        'https://firstmap-1571998274715.firebaseio.com/stores'
-      )
-
-      // console.log(response)
-      //
-      if (response.status === 200) {
-        // console.log(response.data)
-      }
-    }
-
-    postApi()
-  }, [])
 
   return (
     <>

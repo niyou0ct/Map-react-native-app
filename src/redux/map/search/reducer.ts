@@ -8,14 +8,17 @@ const initialState: MapSearchState = {
   keyword: ''
 }
 
-const mapSearchState = (state: MapSearchState = initialState, action: MapSearchActionTypes) => {
+const mapSearchState = (
+  state: MapSearchState = initialState,
+  action: MapSearchActionTypes
+): MapSearchState => {
   switch (action.type) {
     case REQUEST_MAP_SEARCH_API:
-      return {state: action}
+      return Object.assign(state, action)
     case SUCCESS_MAP_SEARCH_API:
-      return {state: action}
+      return Object.assign(state, action)
     case FAIL_MAP_SEARCH_API:
-      return {state: action}
+      return Object.assign(state, action)
     default:
       return state
   }
