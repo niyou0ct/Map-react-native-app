@@ -4,7 +4,10 @@ import {REQUEST_MAP_SEARCH_API, SUCCESS_MAP_SEARCH_API, FAIL_MAP_SEARCH_API} fro
 const initialState: MapSearchState = {
   type: '',
   isApiClear: true,
-  response: '',
+  response: {
+    results: [],
+    status: ''
+  },
   keyword: ''
 }
 

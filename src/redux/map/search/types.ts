@@ -1,8 +1,9 @@
 import {requestMapSearchApi, successMapSearchApi, failMapSearchApi} from './action'
+import {GeocodeAPIResponse} from '../types'
 
 export type MapSearchState = {
   type: string
-  response: any
+  response: GeocodeAPIResponse
   isApiClear: boolean
   keyword: string
 }
