@@ -1,15 +1,10 @@
 import React from 'react'
 import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} from 'react-native'
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions
-} from 'react-native/Libraries/NewAppScreen'
+import {Header, LearnMoreLinks, Colors, DebugInstructions, ReloadInstructions} from 'react-native/Libraries/NewAppScreen'
 
 import {NavigationObj} from '../../../types'
+import Navigator from '../../../modules/navigator/Navigator'
 
 interface Props {
   navigation: NavigationObj
@@ -18,11 +13,6 @@ interface Props {
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
   /* eslint no-undef: off */
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-
-  const moveToPage = (value: string) => {
-    const {navigate} = props.navigation
-    navigate(value)
-  }
 
   return (
     <>
@@ -37,14 +27,13 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
           )}
           <View style={styles.body}>
             <View>
-              <Button title="Go to Map" onPress={() => moveToPage('Map')} />
-              <Button title="Go to Registration Store" onPress={() => moveToPage('AddStore')} />
+              <Button title="Go to Map" onPress={() => Navigator({navigation: props.navigation, place: 'Map'})} />
+              <Button title="Go to Registration Store" onPress={() => Navigator({navigation: props.navigation, place: 'AddStore'})} />
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then
-                come back to see your edits.
+                Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then come back to see your edits.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
@@ -61,9 +50,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
+              <Text style={styles.sectionDescription}>Read the docs to discover what to do next:</Text>
             </View>
             <LearnMoreLinks />
           </View>

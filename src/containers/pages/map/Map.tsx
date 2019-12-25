@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {View, StyleSheet} from 'react-native'
-import MapView, {PROVIDER_GOOGLE, Marker, LatLng} from 'react-native-maps'
-import {RegionObj} from './types'
+import MapView, {PROVIDER_GOOGLE, Marker, LatLng, Region} from 'react-native-maps'
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +12,7 @@ const styles = StyleSheet.create({
 })
 
 const Map: React.FC = (): JSX.Element => {
-  const initialState: RegionObj = {
+  const initialState: Region = {
     latitude: 37.78825,
     longitude: -122.4324,
     latitudeDelta: 0.0922,
@@ -31,11 +30,9 @@ const Map: React.FC = (): JSX.Element => {
     }
   ]
 
-  const markerList: JSX.Element[] = markers.map((marker: LatLng) => (
-    <Marker coordinate={marker} key={marker.latitude} />
-  ))
+  const markerList: JSX.Element[] = markers.map((marker: LatLng) => <Marker coordinate={marker} key={marker.latitude} />)
 
-  const [regionState] = useState<RegionObj>(initialState)
+  const [regionState] = useState<Region>(initialState)
 
   return (
     <View style={styles.container}>

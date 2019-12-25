@@ -1,8 +1,2 @@
-export type RegionObj = {
-  latitude: number
-  longitude: number
-  latitudeDelta: number
-  longitudeDelta: number
-}
-
+export type MapProps = {}
 // 'AIzaSyAC6aDK6EW0LGbLgaICQXpwIqCzJeWez-k'

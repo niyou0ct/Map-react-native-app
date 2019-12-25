@@ -8,10 +8,7 @@ import {RootState} from './types'
 const sagaMiddleware: SagaMiddleware<RootState> = createSagaMiddleware()
 
 const configureStore = (): Store<RootState, AnyAction> => {
-  const store: Store<RootState, AnyAction> & {dispatch: Dispatch<AnyAction>} = createStore(
-    reducer,
-    composeWithDevTools(applyMiddleware(sagaMiddleware))
-  )
+  const store: Store<RootState, AnyAction> & {dispatch: Dispatch<AnyAction>} = createStore(reducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
   sagaMiddleware.run(rootSaga)
 
   return store

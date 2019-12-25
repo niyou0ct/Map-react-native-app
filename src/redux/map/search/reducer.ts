@@ -1,5 +1,5 @@
 import {MapSearchState, MapSearchActionTypes} from './types'
-import {REQUEST_MAP_SEARCH_API, SUCCESS_MAP_SEARCH_API, FAIL_MAP_SEARCH_API} from './action'
+import {REQUEST_MAP_SEARCH_API, SUCCESS_MAP_SEARCH_API, FAIL_MAP_SEARCH_API, RESET_MAP_SEARCH_API} from './action'
 
 const initialState: MapSearchState = {
   type: '',
@@ -11,17 +11,16 @@ const initialState: MapSearchState = {
   keyword: ''
 }
 
-const mapSearchState = (
-  state: MapSearchState = initialState,
-  action: MapSearchActionTypes
-): MapSearchState => {
+const mapSearchState = (state: MapSearchState = initialState, action: MapSearchActionTypes): MapSearchState => {
   switch (action.type) {
     case REQUEST_MAP_SEARCH_API:
-      return Object.assign(state, action)
+      return {...state, ...action}
     case SUCCESS_MAP_SEARCH_API:
-      return Object.assign(state, action)
+      return {...state, ...action}
     case FAIL_MAP_SEARCH_API:
-      return Object.assign(state, action)
+      return {...state, ...action}
+    case RESET_MAP_SEARCH_API:
+      return {...state, ...action}
     default:
       return state
   }

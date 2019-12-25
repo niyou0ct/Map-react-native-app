@@ -13,7 +13,7 @@ module.exports = {
       {
         'singleQuote': true,
         'semi': false,
-        'printWidth': 100,
+        'printWidth': 200,
       }
     ],
     '@typescript-eslint/no-use-before-define': 'off',

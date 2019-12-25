@@ -16,6 +16,6 @@ function* activateRequestMapSearch(action: MapSearchState) {
   }
 }
 
-const mapSearchSaga = [takeEvery(REQUEST_MAP_SEARCH_API, activateRequestMapSearch as any)]
+const mapSearchSaga = [takeEvery(REQUEST_MAP_SEARCH_API, activateRequestMapSearch)]
 
 export default mapSearchSaga
