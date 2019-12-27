@@ -177,6 +177,20 @@ PODS:
     - React-Core (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/turbomodule/core (= 0.61.2)
+  - FBSDKCoreKit (5.8.0):
+    - FBSDKCoreKit/Basics (= 5.8.0)
+    - FBSDKCoreKit/Core (= 5.8.0)
+  - FBSDKCoreKit/Basics (5.8.0)
+  - FBSDKCoreKit/Core (5.8.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.8.0):
+    - FBSDKLoginKit/Login (= 5.8.0)
+  - FBSDKLoginKit/Login (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FBSDKShareKit (5.8.0):
+    - FBSDKShareKit/Share (= 5.8.0)
+  - FBSDKShareKit/Share (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
   - Firebase/Analytics (6.13.0):
     - Firebase/Core
   - Firebase/Auth (6.13.0):
@@ -496,6 +510,20 @@ PODS:
   - React-jsinspector (0.61.2)
   - react-native-config (0.11.7):
     - React
+  - react-native-fbsdk (1.1.1):
+    - React
+    - react-native-fbsdk/Core (= 1.1.1)
+    - react-native-fbsdk/Login (= 1.1.1)
+    - react-native-fbsdk/Share (= 1.1.1)
+  - react-native-fbsdk/Core (1.1.1):
+    - FBSDKCoreKit (= 5.8)
+    - React
+  - react-native-fbsdk/Login (1.1.1):
+    - FBSDKLoginKit (= 5.8)
+    - React
+  - react-native-fbsdk/Share (1.1.1):
+    - FBSDKShareKit (= 5.8)
+    - React
   - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.26.1):
@@ -581,6 +609,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -607,6 +636,9 @@ SPEC REPOS:
     - BoringSSL-GRPC
     - Crashlytics
     - Fabric
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -661,6 +693,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-fbsdk:
+    :path: "../node_modules/react-native-fbsdk"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -705,6 +739,9 @@ SPEC CHECKSUMS:
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBLazyVector: 68b6a76960fbd8ecd9fb7ce0aadd3329c3340a99
   FBReactNativeSpec: 5a764c60abdc3336a213e5310c40b74741f32839
+  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
+  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
+  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
   FirebaseAnalytics: 45f36d9c429fc91d206283900ab75390cd05ee8a
   FirebaseAuth: 831577b184ecaba38bc886768c1c22a450cc44e3
@@ -739,6 +776,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 8909917ff7d8f21a57e443a866fd8d4560e50c65
   React-jsinspector: 111d7d342b07a904c400592e02a2b958f1098b60
   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+  react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
   react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
