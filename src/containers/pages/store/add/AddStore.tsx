@@ -9,6 +9,7 @@ import {SUCCESS_SAVE_RESTAURANT_API, resetSaveRestaurantApi} from '../../../../r
 import {RestaurantInformationParams} from '../../../../redux/restaurant/save/types'
 import Navigator from '../../../../modules/navigator/Navigator'
 import {SUCCESS_RESTAURANT_LIST_API} from '../../../../redux/restaurant/list/action'
+import FetchCurrentPosition from '../../../../modules/fetch-current-position/FetchCurrentPosition'
 
 const styles = StyleSheet.create({
   container: {
@@ -81,19 +82,16 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   }, [activateRequestRestaurantListApi, restaurantListState.type])
 
   useEffect(() => {
-    const fetchCurrentPosition = (): void => {
-      Geolocation.getCurrentPosition((info: GeolocationResponse) => {
-        const updateRegion: Region = {
-          latitude: info.coords.latitude,
-          longitude: info.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        }
+    Geolocation.getCurrentPosition((info: GeolocationResponse): void => {
+      const updateRegion: Region = {
+        latitude: info.coords.latitude,
+        longitude: info.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      }
 
-        setLocation(updateRegion)
-      })
-    }
-    fetchCurrentPosition()
+      setLocation(updateRegion)
+    })
   }, [])
 
   useEffect(() => {

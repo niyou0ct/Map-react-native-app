@@ -4,13 +4,13 @@ import {createStackNavigator} from 'react-navigation-stack'
 import {Provider} from 'react-redux'
 
 import Home from './containers/pages/home/Home'
-import Map from './containers/pages/map/Map'
 import store from './redux/store'
 import AddStoreContainer from './containers/pages/store/add/AddStoreContainer'
+import MapContainer from './containers/pages/map/MapContainer'
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Home},
-  Map: {screen: Map},
+  Map: {screen: MapContainer},
   AddStore: {screen: AddStoreContainer}
 })
 
