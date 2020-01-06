@@ -39,8 +39,6 @@ const Map: React.FC<MapContainerTypes> = (props: MapContainerTypes): JSX.Element
         longitudeDelta: 0.0421
       }
 
-      console.log(updateRegion)
-
       setLocation(updateRegion)
     })
   }, [])
@@ -50,8 +48,6 @@ const Map: React.FC<MapContainerTypes> = (props: MapContainerTypes): JSX.Element
       activateRequestRestaurantListApi()
     }
   }, [activateRequestRestaurantListApi, restaurantListState.type])
-
-  console.log(restaurantListState.items)
 
   return (
     <View style={styles.container}>

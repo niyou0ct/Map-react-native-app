@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, TextInput, Text, Alert, Button} from 'react-native'
+import {View, StyleSheet, Alert, Button} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, LatLng, Marker, Region} from 'react-native-maps'
 import Geolocation, {GeolocationResponse} from '@react-native-community/geolocation'
 import {AddStoreContainerTypes} from './types'
@@ -9,7 +9,8 @@ import {SUCCESS_SAVE_RESTAURANT_API, resetSaveRestaurantApi} from '../../../../r
 import {RestaurantInformationParams} from '../../../../redux/restaurant/save/types'
 import Navigator from '../../../../modules/navigator/Navigator'
 import {SUCCESS_RESTAURANT_LIST_API} from '../../../../redux/restaurant/list/action'
-import FetchCurrentPosition from '../../../../modules/fetch-current-position/FetchCurrentPosition'
+import FormInputText from '../../../../components/molecules/form/input-text/FormInputText'
+import {FormInputTextProps} from '../../../../components/molecules/form/input-text/types'
 
 const styles = StyleSheet.create({
   container: {
@@ -55,9 +56,27 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   }
+
+  const restaurantNameFormOptions: FormInputTextProps = {
+    title: 'Restaurant Name',
+    input: {
+      value: '',
+      onChangeText: () => {}
+    }
+  }
+
+  const searchFormOptions: FormInputTextProps = {
+    title: 'Enter keywords to search for',
+    input: {
+      value: '',
+      onChangeText: () => {},
+      onBlur: () => {}
+    }
+  }
+
   const [regionState, setLocation] = useState<Region>(defaultRegion)
-  const [searchText, onChangeText] = useState<string | undefined>('')
-  const [storeNameState, setStoreName] = useState<string>('')
+  const [searchText, setSearchText] = useState<string | undefined>(searchFormOptions.input.value)
+  const [storeNameState, setStoreName] = useState<string>(restaurantNameFormOptions.input.value)
 
   const [markerState, setMarker] = useState<LatLng>({
     latitude: regionState.latitude,
@@ -74,6 +93,10 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
       props.activateRequestMapSearchApi(searchText)
     }
   }
+
+  restaurantNameFormOptions.input.onChangeText = (text: string) => setStoreName(text)
+  searchFormOptions.input.onChangeText = (text: string) => setSearchText(text)
+  searchFormOptions.input.onBlur = () => callRequestSearch()
 
   useEffect(() => {
     if (restaurantListState.type !== SUCCESS_RESTAURANT_LIST_API) {
@@ -154,10 +177,7 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   return (
     <View style={styles.baseLayout}>
       <View style={styles.formItemWrapper}>
-        <View>
-          <Text style={styles.formTitle}>Enter keywords to search for</Text>
-          <TextInput style={styles.textInput} onChangeText={text => onChangeText(text)} onBlur={callRequestSearch} value={searchText} />
-        </View>
+        <FormInputText {...searchFormOptions} />
         <View style={styles.mapWrapper}>
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -168,8 +188,7 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
         </View>
       </View>
       <View style={styles.formItemWrapper}>
-        <Text style={styles.formTitle}>Resturant Name</Text>
-        <TextInput style={styles.textInput} onChangeText={text => setStoreName(text)} value={storeNameState} />
+        <FormInputText {...restaurantNameFormOptions} />
       </View>
       <View style={styles.cvWrapper}>
         <Button title="Register" onPress={() => onSubmit()} />

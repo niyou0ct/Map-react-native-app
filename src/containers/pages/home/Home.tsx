@@ -27,6 +27,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
           )}
           <View style={styles.body}>
             <View>
+              <Button title="Go to Sign up" onPress={() => Navigator({navigation: props.navigation, place: 'SignUp'})} />
               <Button title="Go to Map" onPress={() => Navigator({navigation: props.navigation, place: 'Map'})} />
               <Button title="Go to Registration Store" onPress={() => Navigator({navigation: props.navigation, place: 'AddStore'})} />
             </View>
