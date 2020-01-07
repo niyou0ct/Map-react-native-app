@@ -11,6 +11,7 @@ import Navigator from '../../../../modules/navigator/Navigator'
 import {SUCCESS_RESTAURANT_LIST_API} from '../../../../redux/restaurant/list/action'
 import FormInputText from '../../../../components/molecules/form/input-text/FormInputText'
 import {FormInputTextProps} from '../../../../components/molecules/form/input-text/types'
+import {INPUT_TEXT_STYLES} from '../../../../components/atoms/input-text/types'
 
 const styles = StyleSheet.create({
   container: {
@@ -24,16 +25,6 @@ const styles = StyleSheet.create({
     marginTop: 32
   },
   formTitle: {fontSize: 16, marginBottom: 10},
-  textInput: {
-    height: 40,
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
   cvWrapper: {
     marginTop: 40
   },
@@ -60,7 +51,9 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   const restaurantNameFormOptions: FormInputTextProps = {
     title: 'Restaurant Name',
     input: {
+      type: INPUT_TEXT_STYLES.NORMAL,
       value: '',
+      name: 'restaurant_name',
       onChangeText: () => {}
     }
   }
@@ -68,15 +61,17 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   const searchFormOptions: FormInputTextProps = {
     title: 'Enter keywords to search for',
     input: {
+      type: INPUT_TEXT_STYLES.NORMAL,
       value: '',
+      name: 'search',
       onChangeText: () => {},
       onBlur: () => {}
     }
   }
 
   const [regionState, setLocation] = useState<Region>(defaultRegion)
-  const [searchText, setSearchText] = useState<string | undefined>(searchFormOptions.input.value)
-  const [storeNameState, setStoreName] = useState<string>(restaurantNameFormOptions.input.value)
+  const [searchText, setSearchText] = useState<string | undefined>('')
+  const [storeNameState, setStoreName] = useState<string>('')
 
   const [markerState, setMarker] = useState<LatLng>({
     latitude: regionState.latitude,
@@ -95,7 +90,7 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   }
 
   restaurantNameFormOptions.input.onChangeText = (text: string) => setStoreName(text)
-  searchFormOptions.input.onChangeText = (text: string) => setSearchText(text)
+  searchFormOptions.input.onChangeText = (text: string, name: string) => setSearchText(text)
   searchFormOptions.input.onBlur = () => callRequestSearch()
 
   useEffect(() => {
