@@ -35,6 +35,7 @@ const InputText: React.FC<InputTextProps> = (props: InputTextProps): JSX.Element
       value={valueState}
       placeholder={placeholder}
       placeholderTextColor="#a9a9a9"
+      autoCapitalize="none"
       onChangeText={(text: string) => {
         if (onChangeText) {
           setValue(text)
