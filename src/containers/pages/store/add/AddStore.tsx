@@ -12,15 +12,9 @@ import {SUCCESS_RESTAURANT_LIST_API} from '../../../../redux/restaurant/list/act
 import FormInputText from '../../../../components/molecules/form/input-text/FormInputText'
 import {FormInputTextProps} from '../../../../components/molecules/form/input-text/types'
 import {INPUT_TEXT_STYLES} from '../../../../components/atoms/input-text/types'
+import BaseLayout from '../../../organisms/layout/base/BaseLayout'
 
 const styles = StyleSheet.create({
-  container: {
-    // ...StyleSheet.absoluteFillObject
-  },
-  baseLayout: {
-    flex: 1,
-    padding: 15
-  },
   formItemWrapper: {
     marginTop: 32
   },
@@ -170,7 +164,7 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   }, [])
 
   return (
-    <View style={styles.baseLayout}>
+    <BaseLayout>
       <View style={styles.formItemWrapper}>
         <FormInputText {...searchFormOptions} />
         <View style={styles.mapWrapper}>
@@ -188,7 +182,7 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
       <View style={styles.cvWrapper}>
         <Button title="Register" onPress={() => onSubmit()} />
       </View>
-    </View>
+    </BaseLayout>
   )
 }
 

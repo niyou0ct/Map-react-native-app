@@ -9,13 +9,8 @@ import AlertOnApiError from '../../../modules/api-error-alert/ApiErrorAlert'
 import {SignUpParams} from '../../../redux/sign-up/types'
 import {SUCCESS_SIGN_UP_API, resetSignUpApi} from '../../../redux/sign-up/action'
 import store from '../../../redux/store'
-
-const styles = StyleSheet.create({
-  baseLayout: {
-    flex: 1,
-    padding: 15
-  }
-})
+import {setLoading, removeLoading} from '../../../redux/ajax/action'
+import BaseLayout from '../../organisms/layout/base/BaseLayout'
 
 const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
   const inputData: InputTextProps[] = [
@@ -75,6 +70,7 @@ const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
 
   const onSubmit = async () => {
     if (signUpData.email !== '' && signUpData.password !== '') {
+      store.dispatch(setLoading())
       const responseData: RNFirebase.UserCredential | void = await firebase
         .auth()
         .createUserWithEmailAndPassword(signUpData.email, signUpData.password)
@@ -82,6 +78,7 @@ const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
         .catch(error => {
           Alert.alert('The email is not allowed!', 'This email is already used. Please try again with another email', [{text: 'OK'}])
         })
+      store.dispatch(removeLoading())
 
       if ((responseData as RNFirebase.UserCredential).user.uid) {
         const params: SignUpParams = {
@@ -106,12 +103,12 @@ const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
   }, [signUpState.type])
 
   return (
-    <View style={styles.baseLayout}>
+    <BaseLayout>
       {/* <Text>Sign Up with Facebook!</Text>
       <FacebookLoginButton /> */}
       {inputElements}
       <Button title="Sign up" onPress={onSubmit} />
-    </View>
+    </BaseLayout>
   )
 }
 
