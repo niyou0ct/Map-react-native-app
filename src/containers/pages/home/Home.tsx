@@ -3,16 +3,41 @@ import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} fro
 
 import {Header, LearnMoreLinks, Colors, DebugInstructions, ReloadInstructions} from 'react-native/Libraries/NewAppScreen'
 
+import firebase from 'react-native-firebase'
+import {useSelector} from 'react-redux'
 import {NavigationObj} from '../../../types'
 import Navigator from '../../../modules/navigator/Navigator'
+import {RootState} from '../../../redux/types'
+import {LoggedInState} from '../../../redux/logged-in/types'
 
 interface Props {
   navigation: NavigationObj
 }
 
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
-  /* eslint no-undef: off */
-  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+  const isLoggedInState = useSelector<RootState, LoggedInState>((state: RootState) => state.loggedInState)
+  const {isLoggedIn} = isLoggedInState
+
+  const authButtonTitle: string = isLoggedIn ? 'Sign out' : 'Sign in'
+  const authPressButton = (): void => {
+    if (isLoggedIn) {
+      firebase.auth().signOut()
+    } else {
+      Navigator({navigation: props.navigation, place: 'SignIn'})
+    }
+  }
+
+  const navigationElements = ((): JSX.Element => {
+    if (isLoggedIn) {
+      return (
+        <View>
+          <Button title="Go to Map" onPress={() => Navigator({navigation: props.navigation, place: 'Map'})} />
+          <Button title="Go to Registration Store" onPress={() => Navigator({navigation: props.navigation, place: 'AddStore'})} />
+        </View>
+      )
+    }
+    return <View />
+  })()
 
   return (
     <>
@@ -20,40 +45,12 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
           <Header />
-          {!usingHermes ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
           <View style={styles.body}>
             <View>
+              <Button title={authButtonTitle} onPress={authPressButton} />
               <Button title="Go to Sign up" onPress={() => Navigator({navigation: props.navigation, place: 'SignUp'})} />
-              <Button title="Go to Map" onPress={() => Navigator({navigation: props.navigation, place: 'Map'})} />
-              <Button title="Go to Registration Store" onPress={() => Navigator({navigation: props.navigation, place: 'AddStore'})} />
+              {navigationElements}
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>Read the docs to discover what to do next:</Text>
-            </View>
-            <LearnMoreLinks />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -71,32 +68,6 @@ const styles = StyleSheet.create({
   },
   body: {
     backgroundColor: Colors.white
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark
-  },
-  highlight: {
-    fontWeight: '700'
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right'
   }
 })
 

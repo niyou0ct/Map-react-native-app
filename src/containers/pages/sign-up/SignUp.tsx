@@ -36,7 +36,8 @@ const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
       type: '',
       name: 'password',
       value: '',
-      placeholder: 'Password'
+      placeholder: 'Password',
+      isSecured: true
     }
   ]
 
@@ -63,7 +64,7 @@ const SignUp: React.FC<SignUpTypes> = (props: SignUpTypes): JSX.Element => {
 
     return (
       <View key={data.name}>
-        <InputText type={type} name={data.name} value={signUpData[key]} placeholder={data.placeholder} onChangeText={onChangeText} />
+        <InputText type={type} name={data.name} value={signUpData[key]} placeholder={data.placeholder} isSecured={data.isSecured} onChangeText={onChangeText} />
       </View>
     )
   })

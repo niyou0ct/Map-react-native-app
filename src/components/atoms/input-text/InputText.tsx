@@ -26,13 +26,15 @@ const styles = StyleSheet.create({
 })
 
 const InputText: React.FC<InputTextProps> = (props: InputTextProps): JSX.Element => {
-  const {type, name, value, placeholder, onChangeText, onBlur}: InputTextProps = props
+  const {type, name, value, placeholder, isSecured, onChangeText, onBlur}: InputTextProps = props
   const [valueState, setValue] = useState<string>(value)
+  const isSecuredSet: boolean = !!isSecured
 
   return (
     <TextInput
       style={(styles as any)[type]}
       value={valueState}
+      secureTextEntry={isSecuredSet}
       placeholder={placeholder}
       placeholderTextColor="#a9a9a9"
       autoCapitalize="none"

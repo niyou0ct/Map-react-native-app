@@ -3,6 +3,7 @@ export type InputTextProps = {
   name: string
   value: string
   placeholder?: string
+  isSecured?: boolean
   onChangeText?: (text: string, name: string) => void
   onBlur?: () => void
 }

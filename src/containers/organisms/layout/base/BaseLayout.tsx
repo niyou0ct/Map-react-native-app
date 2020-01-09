@@ -24,6 +24,7 @@ const BaseLayout: React.FC = (props: any) => {
   })()
 
   const {children} = props
+
   return (
     <View style={styles.baseLayout}>
       {loadingSwitcher}

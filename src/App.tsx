@@ -7,9 +7,14 @@ import store from './redux/store'
 import AddStoreContainer from './containers/pages/store/add/AddStoreContainer'
 import MapContainer from './containers/pages/map/MapContainer'
 import SignUpContainer from './containers/pages/sign-up/SignUpContainer'
+import SignInContainer from './containers/pages/sign-in/SignInContainer'
+import CheckLoggedIn from './modules/check-logged-in/CheckLoggedIn'
+
+CheckLoggedIn()
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Home},
+  SignIn: {screen: SignInContainer},
   SignUp: {screen: SignUpContainer},
   Map: {screen: MapContainer},
   AddStore: {screen: AddStoreContainer}
