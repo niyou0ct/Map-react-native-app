@@ -1,5 +1,3 @@
-import {SignUpState, SignUpParams} from '../../../redux/sign-up/types'
-
 export type SignUpDataTypes = {
   username: string
   userID: string
@@ -8,12 +6,4 @@ export type SignUpDataTypes = {
   [key: string]: string
 }
 
-export type SignUpStateTypes = {
-  signUpState: SignUpState
-}
-
-export type SignUpDispatchTypes = {
-  activateSignUpApi: (payload: SignUpParams) => void
-}
-
-export type SignUpTypes = SignUpStateTypes & SignUpDispatchTypes
+export type SignUpProps = {}

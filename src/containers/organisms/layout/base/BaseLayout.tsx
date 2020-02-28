@@ -1,33 +1,19 @@
-import React from 'react'
+import React, {useGlobal} from 'reactn'
 import {StyleSheet, View, ActivityIndicator} from 'react-native'
-import {useSelector} from 'react-redux'
-import {RootState} from '../../../../redux/types'
-import {AjaxState} from '../../../../redux/ajax/types'
 
 const BaseLayout: React.FC = (props: any) => {
-  const ajaxState = useSelector<RootState, AjaxState>((state: RootState) => state.ajaxState)
-  const loadingSwitcher: JSX.Element = (() => {
-    let elem: JSX.Element = <View />
-    if (ajaxState.isLoading) {
-      elem = (
+  const [ajaxState] = useGlobal('ajaxState')
+  const {children} = props
+
+  return (
+    <View style={styles.baseLayout}>
+      {ajaxState.isLoading && (
         <View style={styles.loadingWrapper}>
           <View style={styles.loadingWrapperInner}>
             <ActivityIndicator size="large" color="#fff" />
           </View>
         </View>
-      )
-    } else {
-      elem = <View />
-    }
-
-    return elem
-  })()
-
-  const {children} = props
-
-  return (
-    <View style={styles.baseLayout}>
-      {loadingSwitcher}
+      )}
       {children}
     </View>
   )

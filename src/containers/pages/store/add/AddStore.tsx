@@ -2,17 +2,18 @@ import React, {useState, useEffect} from 'react'
 import {View, StyleSheet, Alert, Button} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, LatLng, Marker, Region} from 'react-native-maps'
 import Geolocation, {GeolocationResponse} from '@react-native-community/geolocation'
-import {AddStoreContainerTypes} from './types'
-import {SUCCESS_MAP_SEARCH_API, resetMapSearchApi} from '../../../../redux/map/search/action'
-import store from '../../../../redux/store'
-import {SUCCESS_SAVE_RESTAURANT_API, resetSaveRestaurantApi} from '../../../../redux/restaurant/save/action'
-import {RestaurantInformationParams} from '../../../../redux/restaurant/save/types'
+import {RNFirebase} from 'react-native-firebase'
+import {AxiosResponse} from 'axios'
+import {AddStoreProps} from './types'
+import {GeocodeAPIResponse} from '../../../../api/types'
 import Navigator from '../../../../modules/navigator/Navigator'
-import {SUCCESS_RESTAURANT_LIST_API} from '../../../../redux/restaurant/list/action'
 import FormInputText from '../../../../components/molecules/form/input-text/FormInputText'
 import {FormInputTextProps} from '../../../../components/molecules/form/input-text/types'
 import {INPUT_TEXT_STYLES} from '../../../../components/atoms/input-text/types'
 import BaseLayout from '../../../organisms/layout/base/BaseLayout'
+import {postSaveRestaurantApi, fetchRestaurantListApi, postMapSearchApi} from '../../../../api/restaurant/apis'
+import AlertOnApiError from '../../../../modules/api-error-alert/ApiErrorAlert'
+import {RestaurantInformationParams} from '../../../../api/restaurant/types'
 
 const styles = StyleSheet.create({
   formItemWrapper: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerTypes): JSX.Element => {
+const AddStore: React.FC<AddStoreProps> = (props: AddStoreProps): JSX.Element => {
   const defaultRegion: Region = {
     latitude: 37.785834,
     longitude: -122.406417,
@@ -66,20 +67,47 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   const [regionState, setLocation] = useState<Region>(defaultRegion)
   const [searchText, setSearchText] = useState<string | undefined>('')
   const [storeNameState, setStoreName] = useState<string>('')
-
+  const [restaurantListState, setRestaurantListState] = useState<RestaurantInformationParams[]>([])
   const [markerState, setMarker] = useState<LatLng>({
     latitude: regionState.latitude,
     longitude: regionState.longitude
   })
-  const {mapSearchState}: AddStoreContainerTypes = props
-  const {saveRestaurantState}: AddStoreContainerTypes = props
-  const {restaurantListState}: AddStoreContainerTypes = props
-  const {activateRequestRestaurantListApi}: AddStoreContainerTypes = props
   const {navigation}: any = props
 
-  const callRequestSearch = (): void => {
+  const initSearchWithKeywords = (data: GeocodeAPIResponse): void => {
+    if (data.results.length > 0) {
+      const updateRegion: Region = {
+        latitude: data.results[0].geometry.location.lat,
+        longitude: data.results[0].geometry.location.lng,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      }
+
+      const marker: LatLng = {
+        latitude: updateRegion.latitude,
+        longitude: updateRegion.longitude
+      }
+
+      setMarker(marker)
+      setLocation(updateRegion)
+
+      const isOverwrapped: boolean = restaurantListState.some(item => JSON.stringify(item.region) === JSON.stringify(marker))
+      if (isOverwrapped) {
+        Alert.alert('Already registered...', 'Please try other restaurants')
+      }
+    } else {
+      Alert.alert('No results', 'Please try to seach with other keywords', [{text: 'OK'}])
+    }
+  }
+
+  const callRequestSearch = async (): Promise<void> => {
     if (searchText) {
-      props.activateRequestMapSearchApi(searchText)
+      const response: AxiosResponse<GeocodeAPIResponse> | void = await postMapSearchApi(searchText)
+
+      if (response) {
+        const {data} = response
+        initSearchWithKeywords(data)
+      }
     }
   }
 
@@ -88,10 +116,18 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
   searchFormOptions.input.onBlur = () => callRequestSearch()
 
   useEffect(() => {
-    if (restaurantListState.type !== SUCCESS_RESTAURANT_LIST_API) {
-      activateRequestRestaurantListApi()
+    const fetchApi = async (): Promise<void> => {
+      const response: RNFirebase.firestore.QuerySnapshot | void = await fetchRestaurantListApi()
+
+      if (response) {
+        const data = response.docs.map(doc => doc.data()) as RestaurantInformationParams[]
+        setRestaurantListState(data)
+      } else {
+        AlertOnApiError()
+      }
     }
-  }, [activateRequestRestaurantListApi, restaurantListState.type])
+    fetchApi()
+  }, [])
 
   useEffect(() => {
     Geolocation.getCurrentPosition((info: GeolocationResponse): void => {
@@ -106,62 +142,19 @@ const AddStore: React.FC<AddStoreContainerTypes> = (props: AddStoreContainerType
     })
   }, [])
 
-  useEffect(() => {
-    const initSearchWithKeywords = (): void => {
-      if (mapSearchState.type === SUCCESS_MAP_SEARCH_API) {
-        if (mapSearchState.response.results.length > 0) {
-          const updateRegion: Region = {
-            latitude: mapSearchState.response.results[0].geometry.location.lat,
-            longitude: mapSearchState.response.results[0].geometry.location.lng,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }
-
-          const marker: LatLng = {
-            latitude: updateRegion.latitude,
-            longitude: updateRegion.longitude
-          }
-
-          setMarker(marker)
-          setLocation(updateRegion)
-
-          const isOverwrapped: boolean = restaurantListState.items.some(item => JSON.stringify(item.region) === JSON.stringify(marker))
-          if (isOverwrapped) {
-            Alert.alert('Already registered...', 'Please try other restaurants')
-          }
-        } else {
-          Alert.alert('No results', 'Please try to seach with other keywords', [{text: 'OK'}])
-        }
-      }
-    }
-
-    initSearchWithKeywords()
-  }, [mapSearchState.response.results, mapSearchState.type, markerState.latitude, markerState.longitude, restaurantListState])
-
-  const onSubmit = (): void => {
+  const onSubmit = async (): Promise<void> => {
     const data: RestaurantInformationParams = {
       region: markerState,
       name: storeNameState
     }
 
-    props.activateRequestSaveRestaurantApi(data)
+    const response: string | void = await postSaveRestaurantApi(data)
+    if (response) {
+      Alert.alert('New Restaurant was launched!', 'Check it out and fill out your review!', [{text: 'See it', onPress: () => Navigator({navigation, place: 'Home'})}])
+    } else {
+      AlertOnApiError()
+    }
   }
-
-  useEffect(() => {
-    const initAlertForSuccessSave = (): void => {
-      if (saveRestaurantState.type === SUCCESS_SAVE_RESTAURANT_API) {
-        Alert.alert('New Restaurant was launched!', 'Check it out and fill out your review!', [{text: 'See it', onPress: () => Navigator({navigation, place: 'Home'})}])
-        store.dispatch(resetSaveRestaurantApi())
-      }
-    }
-    initAlertForSuccessSave()
-  }, [navigation, saveRestaurantState.type])
-
-  useEffect(() => {
-    return () => {
-      store.dispatch(resetMapSearchApi())
-    }
-  }, [])
 
   return (
     <BaseLayout>

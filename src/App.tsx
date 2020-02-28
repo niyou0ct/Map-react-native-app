@@ -1,33 +1,41 @@
-import React from 'react'
+import React, {useDispatch} from 'reactn'
+import firebase from 'react-native-firebase'
 import {createAppContainer, NavigationContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import {Provider} from 'react-redux'
+import {handleLoggedInStatus} from './state/auth/actions'
 import Home from './containers/pages/home/Home'
 import store from './redux/store'
-import AddStoreContainer from './containers/pages/store/add/AddStoreContainer'
-import MapContainer from './containers/pages/map/MapContainer'
-import SignUpContainer from './containers/pages/sign-up/SignUpContainer'
-import SignInContainer from './containers/pages/sign-in/SignInContainer'
-import CheckLoggedIn from './modules/check-logged-in/CheckLoggedIn'
-
-CheckLoggedIn()
+import AddStore from './containers/pages/store/add/AddStore'
+import Map from './containers/pages/map/Map'
+import SignUp from './containers/pages/sign-up/SignUp'
+import SignIn from './containers/pages/sign-in/SignIn'
+import './state/state'
 
 const MainNavigator = createStackNavigator({
   Home: {screen: Home},
-  SignIn: {screen: SignInContainer},
-  SignUp: {screen: SignUpContainer},
-  Map: {screen: MapContainer},
-  AddStore: {screen: AddStoreContainer}
+  SignIn: {screen: SignIn},
+  SignUp: {screen: SignUp},
+  Map: {screen: Map},
+  AddStore: {screen: AddStore}
 })
 
 const AppContainer: NavigationContainer = createAppContainer(MainNavigator)
 
 const App: React.FC = (): JSX.Element => {
+  const handleLoggedInDispatcher = useDispatch(handleLoggedInStatus, 'authState')
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      handleLoggedInDispatcher({hasLoggedIn: true})
+    } else {
+      handleLoggedInDispatcher({hasLoggedIn: false})
+    }
+  })
+
   return (
     // prettier-ignore
-    <Provider store={store}>
-      <AppContainer />
-    </Provider>
+    <AppContainer />
   )
 }
 

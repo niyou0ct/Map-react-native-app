@@ -2,10 +2,11 @@ import React, {useState, useEffect} from 'react'
 import {View, StyleSheet} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker, Region} from 'react-native-maps'
 import Geolocation, {GeolocationResponse} from '@react-native-community/geolocation'
-import {MapContainerTypes} from './types'
-import {SUCCESS_RESTAURANT_LIST_API} from '../../../redux/restaurant/list/action'
-import {RestaurantInformationParams} from '../../../redux/restaurant/save/types'
-import FetchCurrentPosition from '../../../modules/fetch-current-position/FetchCurrentPosition'
+import {RNFirebase} from 'react-native-firebase'
+import {MapProps} from './types'
+import {fetchRestaurantListApi} from '../../../api/restaurant/apis'
+import AlertOnApiError from '../../../modules/api-error-alert/ApiErrorAlert'
+import {RestaurantInformationParams} from '../../../api/restaurant/types'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Map: React.FC<MapContainerTypes> = (props: MapContainerTypes): JSX.Element => {
+const Map: React.FC<MapProps> = (props: MapProps): JSX.Element => {
   const initialState: Region = {
     latitude: 37.785834,
     longitude: -122.406417,
@@ -25,10 +26,8 @@ const Map: React.FC<MapContainerTypes> = (props: MapContainerTypes): JSX.Element
   }
 
   const [regionState, setLocation] = useState<Region>(initialState)
-  const {restaurantListState}: MapContainerTypes = props
-  const {activateRequestRestaurantListApi}: MapContainerTypes = props
-
-  const markerList: JSX.Element[] = restaurantListState.items.map((item: RestaurantInformationParams) => <Marker coordinate={item.region} key={item.region.latitude} />)
+  const [restaurantListState, setRestaurantListState] = useState<RestaurantInformationParams[]>([])
+  const markerList: JSX.Element[] = restaurantListState.map((item: RestaurantInformationParams) => <Marker coordinate={item.region} key={item.region.latitude} />)
 
   useEffect(() => {
     Geolocation.getCurrentPosition((info: GeolocationResponse): void => {
@@ -44,10 +43,18 @@ const Map: React.FC<MapContainerTypes> = (props: MapContainerTypes): JSX.Element
   }, [])
 
   useEffect(() => {
-    if (restaurantListState.type !== SUCCESS_RESTAURANT_LIST_API) {
-      activateRequestRestaurantListApi()
+    const fetchApi = async (): Promise<void> => {
+      const response: RNFirebase.firestore.QuerySnapshot | void = await fetchRestaurantListApi()
+
+      if (response) {
+        const data = response.docs.map(doc => doc.data()) as RestaurantInformationParams[]
+        setRestaurantListState(data)
+      } else {
+        AlertOnApiError()
+      }
     }
-  }, [activateRequestRestaurantListApi, restaurantListState.type])
+    fetchApi()
+  }, [])
 
   return (
     <View style={styles.container}>

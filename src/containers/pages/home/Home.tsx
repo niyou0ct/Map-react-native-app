@@ -1,26 +1,23 @@
-import React from 'react'
-import {SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, Button} from 'react-native'
+import React, {useGlobal} from 'reactn'
+import {SafeAreaView, StyleSheet, ScrollView, View, StatusBar, Button} from 'react-native'
 
-import {Header, LearnMoreLinks, Colors, DebugInstructions, ReloadInstructions} from 'react-native/Libraries/NewAppScreen'
+import {Header, Colors} from 'react-native/Libraries/NewAppScreen'
 
 import firebase from 'react-native-firebase'
-import {useSelector} from 'react-redux'
 import {NavigationObj} from '../../../types'
 import Navigator from '../../../modules/navigator/Navigator'
-import {RootState} from '../../../redux/types'
-import {LoggedInState} from '../../../redux/logged-in/types'
 
 interface Props {
   navigation: NavigationObj
 }
 
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
-  const isLoggedInState = useSelector<RootState, LoggedInState>((state: RootState) => state.loggedInState)
-  const {isLoggedIn} = isLoggedInState
+  const [authState] = useGlobal('authState')
+  const {hasLoggedIn} = authState
 
-  const authButtonTitle: string = isLoggedIn ? 'Sign out' : 'Sign in'
+  const authButtonTitle: string = hasLoggedIn ? 'Sign out' : 'Sign in'
   const authPressButton = (): void => {
-    if (isLoggedIn) {
+    if (hasLoggedIn) {
       firebase.auth().signOut()
     } else {
       Navigator({navigation: props.navigation, place: 'SignIn'})
@@ -28,7 +25,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   const navigationElements = ((): JSX.Element => {
-    if (isLoggedIn) {
+    if (hasLoggedIn) {
       return (
         <View>
           <Button title="Go to Map" onPress={() => Navigator({navigation: props.navigation, place: 'Map'})} />

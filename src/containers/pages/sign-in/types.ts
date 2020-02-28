@@ -1,4 +1,3 @@
-import {SignInState, SignInParams} from '../../../redux/sign-in/types'
 import {NavigationObj} from '../../../types'
 
 export type SignInDataTypes = {
@@ -7,12 +6,4 @@ export type SignInDataTypes = {
   [key: string]: string
 }
 
-export type SignInStateTypes = {
-  signInState: SignInState
-}
-
-export type SignInDispatchTypes = {
-  activateSignInApi: (payload: SignInParams) => void
-}
-
-export type SignInTypes = SignInStateTypes & SignInDispatchTypes & NavigationObj
+export type SignInProps = NavigationObj
